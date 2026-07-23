@@ -1,105 +1,96 @@
 <!DOCTYPE html>
-<html lang="am">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Vortex Tap - Pro</title>
+    <title>Vortex Tap</title>
     <style>
-        :root { --primary: #7000ff; --secondary: #00f2ff; --bg: #050505; }
-        body { background: var(--bg); color: white; font-family: 'Segoe UI', sans-serif; margin: 0; display: flex; flex-direction: column; align-items: center; min-height: 100vh; }
+        body { background: #050505; color: white; font-family: Arial, sans-serif; margin: 0; height: 100vh; display: flex; flex-direction: column; }
         
-        /* Premium Layout */
-        .header { text-align: center; margin-top: 20px; }
-        .score-display { font-size: 40px; font-weight: bold; color: var(--secondary); text-shadow: 0 0 10px var(--secondary); }
-        .rank-badge { background: #1a1a1a; padding: 5px 15px; border-radius: 20px; color: gold; border: 1px solid gold; margin-bottom: 10px; }
-        
-        /* The Coin */
-        .coin-container { position: relative; margin: 30px 0; }
-        #coin-img { width: 220px; height: 220px; border-radius: 50%; border: 4px solid var(--primary); cursor: pointer; transition: 0.1s; box-shadow: 0 0 30px rgba(112, 0, 255, 0.4); }
-        #coin-img:active { transform: scale(0.95); box-shadow: 0 0 50px var(--primary); }
+        /* Top Section */
+        .header { text-align: center; padding: 20px; }
+        .rank { color: gold; font-weight: bold; margin-bottom: 5px; }
+        .balance { font-size: 45px; font-weight: bold; color: #00f2ff; }
 
-        /* Menu */
-        .menu-bar { display: flex; gap: 10px; width: 90%; justify-content: center; margin-bottom: 20px; }
-        .btn { background: #1a1a1a; border: 1px solid #333; padding: 12px 20px; color: white; border-radius: 10px; cursor: pointer; transition: 0.3s; }
-        .btn:hover { background: var(--primary); border-color: var(--secondary); }
+        /* Middle Section - Large Coin */
+        .coin-area { flex: 1; display: flex; justify-content: center; align-items: center; }
+        #coin-img { width: 280px; height: 280px; cursor: pointer; transition: 0.1s; border-radius: 50%; box-shadow: 0 0 40px rgba(0, 242, 255, 0.3); }
+        #coin-img:active { transform: scale(0.95); }
 
-        /* Modal Styles */
-        .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); justify-content: center; align-items: center; z-index: 10; }
-        .modal-content { background: #111; padding: 30px; border-radius: 20px; border: 1px solid var(--primary); width: 80%; text-align: center; }
+        /* Bottom Navigation */
+        .nav-bar { display: flex; justify-content: space-around; padding: 20px; background: #111; border-top: 1px solid #333; }
+        .btn { background: #222; color: white; border: 1px solid #444; padding: 15px 20px; border-radius: 8px; cursor: pointer; font-size: 14px; }
+        .btn:hover { background: #7000ff; }
     </style>
 </head>
 <body>
 
     <div class="header">
-        <div class="rank-badge" id="rank">Rank: Rookie</div>
-        <div class="score-display">🪙 <span id="score">0</span></div>
-        <p>Your Balance</p>
+        <div class="rank" id="rank">Rank: Rookie</div>
+        <div class="balance" id="score">0</div>
+        <div>Your Balance</div>
     </div>
 
-    <div class="coin-container">
-        <!-- እዚህ ጋር ያንተን የኮይን ምስል ሊንክ አስገባ -->
-        <img src="https://i.imgur.com/your-coin-image.png" id="coin-img" alt="Tap">
+    <div class="coin-area">
+        <!-- REPLACE THE LINK BELOW WITH YOUR OWN IMAGE LINK -->
+        <img src="https://upload.wikimedia.org/wikipedia/commons/4/46/Bitcoin.svg" id="coin-img" alt="Coin">
     </div>
 
-    <div class="menu-bar">
-        <button class="btn" onclick="openModal('boostModal')">🚀 Boost</button>
-        <button class="btn" onclick="openModal('taskModal')">📋 Tasks</button>
-        <button class="btn" onclick="openModal('withdrawModal')">💰 Withdraw</button>
+    <div class="nav-bar">
+        <button class="btn" onclick="boost()">🚀 Boost</button>
+        <button class="btn" onclick="task()">📋 Tasks</button>
+        <button class="btn" onclick="withdraw()">💰 Withdraw</button>
     </div>
-
-    <!-- Modals (Hidden by default) -->
-    <div id="boostModal" class="modal" onclick="closeModal('boostModal')"><div class="modal-content" onclick="event.stopPropagation()">
-        <h2>Boost Power</h2>
-        <p>100 Coins = +2 Tap Power</p>
-        <button class="btn" onclick="boost()">Buy Boost</button>
-    </div></div>
-
-    <div id="taskModal" class="modal" onclick="closeModal('taskModal')"><div class="modal-content" onclick="event.stopPropagation()">
-        <h2>Daily Tasks</h2>
-        <p style="color: red;"> After pressing 'Get Link', return to the app! </p>
-        <button class="btn" onclick="window.open('https://ouo.io/tiTmRou', '_blank'); addCoins(2000);">Complete Task (+2000)</button>
-    </div></div>
-
-    <div id="withdrawModal" class="modal" onclick="closeModal('withdrawModal')"><div class="modal-content" onclick="event.stopPropagation()">
-        <h2>Withdraw</h2>
-        <p>Min Withdrawal: 50,000 Coins</p>
-        <input type="text" id="wallet" placeholder="Enter Wallet Address (TON/USDT)" style="width: 80%; padding: 10px; margin-bottom: 10px;">
-        <button class="btn" onclick="withdraw()">Confirm Withdraw</button>
-    </div></div>
-
-    <!-- እዚህ ጋር የማስታወቂያ ኮድህን (Ad Script) መጨመር ትችላለህ -->
-    <!-- <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script> -->
 
     <script>
-        let score = 0, power = 1;
+        // Load saved score from device
+        let score = parseInt(localStorage.getItem('score')) || 0;
+        let power = 1;
+
+        document.getElementById('score').innerText = score;
+        updateUI();
 
         document.getElementById('coin-img').onclick = () => {
             score += power;
             updateUI();
         };
 
-        function addCoins(amount) { score += amount; updateUI(); }
-
         function boost() {
-            if (score >= 100) { score -= 100; power += 2; alert("Boosted!"); updateUI(); }
-            else { alert("you don't have 100 coins"); }
+            if (score >= 100) {
+                score -= 100;
+                power += 2;
+                alert("Boost Successful! +2 Tap Power");
+                updateUI();
+            } else {
+                alert("Not enough coins!");
+            }
+        }
+
+        function task() {
+            const confirmed = confirm("Warning: You must click 'Get Link' to receive rewards. Continue?");
+            if (confirmed) {
+                window.open("https://ouo.io/tiTmRou", "_blank");
+                score += 2000;
+                updateUI();
+            }
         }
 
         function withdraw() {
-            if (score >= 50000) { alert("የwithdraw ጥያቄዎ ለAdmin ተልኳል!"); }
-            else { alert("ቢያንስ 50,000 ያስፈልጋል!"); }
+            if (score >= 50000) {
+                prompt("Enter your wallet address:");
+                alert("Withdrawal request sent!");
+            } else {
+                alert("Minimum withdrawal is 50,000 coins.");
+            }
         }
 
         function updateUI() {
             document.getElementById('score').innerText = score;
+            localStorage.setItem('score', score); // Saves score automatically
+            
             if (score > 100000) document.getElementById('rank').innerText = "Rank: Diamond";
             else if (score > 20000) document.getElementById('rank').innerText = "Rank: Gold";
         }
-
-        function openModal(id) { document.getElementById(id).style.display = 'flex'; }
-        function closeModal(id) { document.getElementById(id).style.display = 'none'; }
     </script>
 </body>
 </html>
-
-
