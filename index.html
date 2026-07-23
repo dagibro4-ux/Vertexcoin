@@ -56,7 +56,7 @@
 
     <div id="taskModal" class="modal" onclick="closeModal('taskModal')"><div class="modal-content" onclick="event.stopPropagation()">
         <h2>Daily Tasks</h2>
-        <p style="color: red;">⚠️ ማስጠንቀቂያ፡ 'Get Link' ከተጫኑ በኋላ ወደ አፕ ይመለሱ!</p>
+        <p style="color: red;"> After pressing 'Get Link', return to the app! </p>
         <button class="btn" onclick="window.open('https://ouo.io/tiTmRou', '_blank'); addCoins(2000);">Complete Task (+2000)</button>
     </div></div>
 
@@ -82,7 +82,7 @@
 
         function boost() {
             if (score >= 100) { score -= 100; power += 2; alert("Boosted!"); updateUI(); }
-            else { alert("በቂ ኮይን የለህም!"); }
+            else { alert("you don't have 100 coins"); }
         }
 
         function withdraw() {
